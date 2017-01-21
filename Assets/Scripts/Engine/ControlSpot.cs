@@ -100,10 +100,15 @@ public class ControlSpot : MonoBehaviour {
 			this.ReleaseWave(GameManager.Instance.Level1ChargeTime);
 		}
 
+		this.CurrentOwner.OnCaptureSpot(this);
+
 	}
 
 	public void OnGoesNeutral(GamePlayer contestant){
 
+		if(this.CurrentOwner != null){
+			this.CurrentOwner.OnLooseSpot(this);
+		}
 		this.currentHP = Mathf.Abs(this.currentHP);
 
 		this.CurrentOwner = contestant;
@@ -111,6 +116,7 @@ public class ControlSpot : MonoBehaviour {
 
 		// Change the color
 		this.spotSprite.color = GameManager.Instance.NeutralMainColor;
+
 	}
 
 
