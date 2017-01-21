@@ -39,7 +39,37 @@ public class GameManager : MonoBehaviour {
 	[Tooltip ("Point at which you conquer a neutral control spot")]
 	public float NeutralSpotConquerPoint = 100f;
 
+	[Header ("Game settings")]
+	public Color NeutralMainColor;
+
+	[Space (10)]
+	public float Level1ChargeTime = 0.75f;
+	public float Level2ChargeTime = 1.5f;
+	public float Level3ChargeTime = 2.25f;
+
+	public float Level1Value = 30f;
+	public float Level2Value = 50f;
+	public float Level3Value = 70f;
+
 	#endregion
 
+	[Header ("Debug")]
+	[SerializeField]
+	private ControlSpot forcedSpot;
+
+	public void Update(){
+
+		// Debug only
+		#if UNITY_EDITOR
+
+		if (Input.GetKeyDown(KeyCode.E) && this.forcedSpot != null){
+
+			this.forcedSpot.ReleaseWave(this.Level1ChargeTime);
+
+		}
+
+
+		#endif
+	}
 
 }

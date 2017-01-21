@@ -8,8 +8,18 @@ public class GamePlayer : MonoBehaviour {
 
 	public static GamePlayer UserPlayer;
 
+	[Header ("GamePlayer")]
 	[SerializeField]
 	private bool isUser = false;
+	public bool IsUser{
+		get {
+			return this.isUser;
+		}
+	}
+
+	[SerializeField]
+	public Color PlayerMainColor;
+
 
 	public List<ControlSpot> ControlledSpots = new List<ControlSpot>();
 

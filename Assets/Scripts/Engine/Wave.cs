@@ -20,7 +20,8 @@ public class Wave : MonoBehaviour {
 	[SerializeField]
 	private float Value = 30f;
 
-	private List<Wave> collidedList = new List<Wave>();
+	private List<object> collidedList = new List<object>();
+	private List<Wave> siblings = new List<Wave>();
 
 	private WaveGenerator Generator;
 
@@ -34,25 +35,43 @@ public class Wave : MonoBehaviour {
 	[SerializeField]
 	private float decaySpeed = 15f;
 
+	[SerializeField]
+	private SpriteRenderer WaveRenderer;
+
+	[SerializeField]
+	private Collider2D collider;
+
 	#endregion
 
 	private void Awake(){
 		this.tr = this.transform;
 
+		this.collider.enabled = false;
+
+		this.Invoke("AwakeCollider", 0.15f);
+
+	}
+
+	private void AwakeCollider(){
+		this.collider.enabled = true;
 	}
 
 	public void SetSiblings(List<Wave> siblings){
 
-		this.collidedList.AddRange(siblings);
-
+		this.siblings.AddRange(siblings);
+		foreach(Wave w in siblings){
+			this.collidedList.Add(w);
+		}
 	}
 
-	public void SetDirection(GamePlayer owner, ControlSpot startSpot, Vector3 targetPos){
+	public void SetDirection(GamePlayer owner, ControlSpot startSpot, Vector3 targetPos, float baseValue){
 
 		this.owner = owner;
 		this.startSpot = startSpot;
 		this.targetPos = targetPos;
+		this.Value = baseValue;
 
+		this.WaveRenderer.color = this.owner.PlayerMainColor;
 	}
 
 
@@ -85,21 +104,43 @@ public class Wave : MonoBehaviour {
 	public void OnTriggerEnter2D(Collider2D col){
 			
 
-		if(col.tag == "wave" && col.GetComponentInChildren<Wave>() != null){
+		if(col.tag == "wave" && col.GetComponentInParent<Wave>() != null){
 
-			Wave w = col.GetComponentInChildren<Wave>();
+			Wave w = col.GetComponentInParent<Wave>();
 
 			if(!this.collidedList.Contains(w)){
 				this.OnCollideWave(w);
-				this.collidedList.Add(w);
+				//this.collidedList.Add(w);
 			}
 
 		}
-		else if(col.tag == "spot" && col.GetComponentInChildren<ControlSpot>() != null){
+		else if(col.tag == "spot" && col.GetComponentInChildren<ControlSpot>() != null ){
 
 			ControlSpot spot = col.GetComponentInChildren<ControlSpot>();
 
-			spot.OnTakeDamage(this.Value, this.owner);
+			if(spot != this.startSpot && !this.collidedList.Contains(spot)){
+				spot.OnTakeDamage(this.Value, this.owner);
+
+				// Add this spot to the collided list of all siblings
+				foreach(Wave w in this.siblings){
+					w.AddToCollidedList(spot);
+				}
+
+				/*
+				// Destroy the wave, except if the spot is owned & already taken
+				if(spot.CurrentOwner != this.owner || !spot.IsTaken){
+					this.OnDestroyWave();
+				}
+				*/
+
+			}
+
+			if(spot != this.startSpot){
+				// Destroy the wave, except if the spot is owned & already taken
+				if(spot.CurrentOwner != this.owner || !spot.IsTaken){
+					this.OnDestroyWave();
+				}
+			}
 
 		}
 
@@ -107,8 +148,14 @@ public class Wave : MonoBehaviour {
 
 	public void OnCollideWave(Wave other){
 
+		Debug.Log("Wave.OnCollideWave - SelfValue "+this.Value+", other value : "+other.Value);
+
 		float otherValue = other.Value;
 		other.OnCollidedByWave(this);
+
+		foreach(Wave w in this.siblings){
+			this.collidedList.Add(other);
+		}
 
 		// If those are ennemies wave
 		if(this.owner != other.owner){
@@ -116,7 +163,7 @@ public class Wave : MonoBehaviour {
 			this.Value -= otherValue;
 
 			// Destroy this wave
-			if(this.Value >= 0f){
+			if(this.Value <= 0f){
 				this.OnDestroyWave();
 			}
 
@@ -134,7 +181,10 @@ public class Wave : MonoBehaviour {
 	/// <param name="other">Other.</param>
 	public void OnCollidedByWave(Wave other){
 		float otherValue = other.Value;
-		this.collidedList.Add(other);
+		//this.collidedList.Add(other);
+		foreach(Wave w in this.siblings){
+			this.collidedList.Add(other);
+		}
 
 		// If those are ennemies wave
 		if(this.owner != other.owner){
@@ -142,7 +192,7 @@ public class Wave : MonoBehaviour {
 			this.Value -= otherValue;
 
 			// Destroy this wave
-			if(this.Value >= 0f){
+			if(this.Value <= 0f){
 				this.OnDestroyWave();
 			}
 
@@ -154,8 +204,12 @@ public class Wave : MonoBehaviour {
 
 	}
 
+	private void AddToCollidedList(object o){
+		this.collidedList.Add(o);
+	}
+
 	public void OnDestroyWave(){
-		this.GetComponentInChildren<Collider2D>().enabled = false;
+		this.collider.enabled = false;
 
 		this.Value = 0f;
 		this.destroyed = true;
