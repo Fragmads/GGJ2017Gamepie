@@ -72,4 +72,16 @@ public class GameManager : MonoBehaviour {
 		#endif
 	}
 
+
+	public void GameOver(){
+
+		Debug.Log("GameManager.GameOver");
+
+	}
+
+	public void Win(){
+		Debug.Log("GameManager.Win");
+
+	}
+
 }

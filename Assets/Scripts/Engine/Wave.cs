@@ -15,9 +15,13 @@ public class Wave : MonoBehaviour {
 	[SerializeField]
 	private float MovementSpeed =10f;
 
+	[SerializeField]
+	private float decaySpeed = 15f;
+
+	[Space(15)]
+
 	private Transform tr;
 
-	[SerializeField]
 	private float Value = 30f;
 
 	private List<object> collidedList = new List<object>();
@@ -32,8 +36,7 @@ public class Wave : MonoBehaviour {
 
 	private float distanceTraveled = 0f;
 
-	[SerializeField]
-	private float decaySpeed = 15f;
+
 
 	[SerializeField]
 	private SpriteRenderer WaveRenderer;
@@ -87,7 +90,7 @@ public class Wave : MonoBehaviour {
 
 			this.distanceTraveled += this.MovementSpeed * Time.fixedDeltaTime;
 
-			this.colliderObject.transform.localScale = new Vector3(this.distanceTraveled * 0.5f, 1f, 1f);
+			this.colliderObject.transform.localScale = new Vector3(this.distanceTraveled * 1f, 1f, 1f);
 
 			// Decay
 			this.Value -= this.decaySpeed * Time.fixedDeltaTime;
