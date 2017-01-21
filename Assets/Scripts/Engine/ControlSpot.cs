@@ -179,9 +179,11 @@ public class ControlSpot : MonoBehaviour {
 	#region SendWave
 
 	public void OnMouseDown(){
-
-		this.CurrentOwner.ClickingOnSpot(this);
-		this.clicked = true;
+		
+		if(this.CurrentOwner != null){
+			this.CurrentOwner.ClickingOnSpot(this);
+			this.clicked = true;
+		}
 
 	}
 
