@@ -15,13 +15,12 @@ public class ControlSpot : MonoBehaviour {
 	[SerializeField]
 	private float maxHP;
 
-
-	public List<ControlSpot> linkedSpots = new List<ControlSpot>();
-
-
 	private float ClickedTime = 0f;
 
 	private bool clicked = false;
+
+	[SerializeField]
+	private Wave wavePrefab;
 
 	#endregion
 
@@ -113,11 +112,33 @@ public class ControlSpot : MonoBehaviour {
 	}
 
 
-	public void ReleaseWave(float holdTime){
+	public virtual void ReleaseWave(float holdTime){
 
 		Debug.Log("ControlSpot.ReleaseWave - HoldTime : "+holdTime);
 
-		// TODO
+		List<Wave> waves = new List<Wave>(); 
+
+		Vector3 posSpot = this.transform.position;
+
+		// Make 16 wave, to look like a circle
+		for(int i=0; i<16; ++i){
+
+			Wave w = GameObject.Instantiate<Wave>(this.wavePrefab);
+			w.transform.position = posSpot;
+
+			w.transform.Rotate(new Vector3(0f, 0f, (i/16f))*360);
+
+			float angle = (i/16f)* (Mathf.PI * 2);
+
+			w.SetDirection(this.CurrentOwner, this, 10000f*(new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f))); 
+
+			waves.Add(w);
+		}
+
+		foreach(Wave w in waves){
+			w.SetSiblings(waves);
+		}
+
 
 	}
 

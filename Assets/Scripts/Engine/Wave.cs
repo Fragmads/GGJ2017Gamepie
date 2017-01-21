@@ -6,14 +6,18 @@ public class Wave : MonoBehaviour {
 
 	#region Properties
 
+	[Header ("Wave")]
+
 	private GamePlayer owner;
 	private ControlSpot startSpot;
-	private ControlSpot arrivalStop;
+	private Vector3 targetPos;
 
+	[SerializeField]
 	private float MovementSpeed =10f;
 
 	private Transform tr;
 
+	[SerializeField]
 	private float Value = 30f;
 
 	private List<Wave> collidedList = new List<Wave>();
@@ -22,6 +26,14 @@ public class Wave : MonoBehaviour {
 
 	private bool destroyed = false;
 
+	[SerializeField]
+	private GameObject colliderObject;
+
+	private float distanceTraveled = 0f;
+
+	[SerializeField]
+	private float decaySpeed = 15f;
+
 	#endregion
 
 	private void Awake(){
@@ -29,12 +41,17 @@ public class Wave : MonoBehaviour {
 
 	}
 
+	public void SetSiblings(List<Wave> siblings){
 
-	public void SetDirection(GamePlayer owner, ControlSpot startSpot, ControlSpot arrivalSpot){
+		this.collidedList.AddRange(siblings);
+
+	}
+
+	public void SetDirection(GamePlayer owner, ControlSpot startSpot, Vector3 targetPos){
 
 		this.owner = owner;
 		this.startSpot = startSpot;
-		this.arrivalStop = arrivalSpot;
+		this.targetPos = targetPos;
 
 	}
 
@@ -47,28 +64,42 @@ public class Wave : MonoBehaviour {
 		if(!this.destroyed){
 
 			// Move this wave
-			this.tr.position = Vector3.MoveTowards(this.tr.position, this.arrivalStop.transform.position, this.MovementSpeed * Time.fixedDeltaTime);
+			this.tr.position = Vector3.MoveTowards(this.tr.position, this.targetPos, this.MovementSpeed * Time.fixedDeltaTime);
 
-			// If we arrived
-			if(this.tr.position == this.arrivalStop.transform.position){
+			this.distanceTraveled += this.MovementSpeed * Time.fixedDeltaTime;
 
-				this.arrivalStop.OnTakeDamage(this.Value, this.owner);
+			this.colliderObject.transform.localScale = new Vector3(this.distanceTraveled * 0.5f, 1f, 1f);
 
+			// Decay
+			this.Value -= this.decaySpeed * Time.fixedDeltaTime;
+
+			// if this wave have decayed
+			if(this.Value <= 0f){
+				this.OnDestroyWave();
 			}
+
 		}
 
 	}
 
 	public void OnTriggerEnter2D(Collider2D col){
+			
 
-		if(col.tag == "wave" && col.GetComponent<Wave>() != null){
+		if(col.tag == "wave" && col.GetComponentInChildren<Wave>() != null){
 
-			Wave w = col.GetComponent<Wave>();
+			Wave w = col.GetComponentInChildren<Wave>();
 
 			if(!this.collidedList.Contains(w)){
 				this.OnCollideWave(w);
 				this.collidedList.Add(w);
 			}
+
+		}
+		else if(col.tag == "spot" && col.GetComponentInChildren<ControlSpot>() != null){
+
+			ControlSpot spot = col.GetComponentInChildren<ControlSpot>();
+
+			spot.OnTakeDamage(this.Value, this.owner);
 
 		}
 
@@ -98,7 +129,7 @@ public class Wave : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Received 
+	/// Used by receiving wave
 	/// </summary>
 	/// <param name="other">Other.</param>
 	public void OnCollidedByWave(Wave other){
@@ -121,15 +152,16 @@ public class Wave : MonoBehaviour {
 
 		}
 
-
 	}
 
 	public void OnDestroyWave(){
-		this.GetComponent<Collider2D>().enabled = false;
+		this.GetComponentInChildren<Collider2D>().enabled = false;
 
 		this.Value = 0f;
 		this.destroyed = true;
 
+		// 
+		GameObject.Destroy(this.gameObject, 0.5f);
 	}
 
 }

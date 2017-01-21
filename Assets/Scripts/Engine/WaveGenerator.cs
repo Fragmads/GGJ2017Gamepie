@@ -11,6 +11,8 @@ public class WaveGenerator : MonoBehaviour {
 
 	private List<Wave> waves;
 
+	//private 
+
 	private GamePlayer owner;
 
 	#endregion
