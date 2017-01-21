@@ -213,8 +213,6 @@ public class ControlSpot : MonoBehaviour {
 				waveValue = GameManager.Instance.Level1Value;
 			}
 
-			waveValue += this.overcharge;
-			this.overcharge = 0f;
 
 			Debug.Log("ControlSpot.ReleaseWave - HoldTime : "+holdTime);
 
@@ -223,8 +221,10 @@ public class ControlSpot : MonoBehaviour {
 			List<Wave> waves = WavePool.Instance.GetWaveImpule();
 
 			foreach(Wave w in waves){
-				w.SetDirection(this.CurrentOwner, this, waveValue);
+				w.SetDirection(this.CurrentOwner, this, waveValue, this.overcharge/2f);
 			}
+
+			this.overcharge = 0f;
 
 		}
 		else{
