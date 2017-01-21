@@ -180,17 +180,17 @@ public class ControlSpot : MonoBehaviour {
 
 			Vector3 posSpot = this.transform.position;
 
-			// Make 16 wave, to look like a circle
-			for(int i=0; i<16; ++i){
+			// Make 4 wave, to look like a circle
+			for(int i=0; i<8; ++i){
 
 				Wave w = GameObject.Instantiate<Wave>(this.wavePrefab);
 				w.transform.position = posSpot;
 
 				w.transform.SetParent(this.WaveParent, true);
 
-				w.transform.Rotate(new Vector3(0f, 0f, (i/16f))*360);
+				w.transform.Rotate(new Vector3(0f, 0f, (i/8f))*360);
 
-				float angle = (i/16f)* (Mathf.PI * 2);
+				float angle = (i/8f)* (Mathf.PI * 2);
 
 				w.SetDirection(this.CurrentOwner, this, 10000f*(new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0)), waveValue); 
 
