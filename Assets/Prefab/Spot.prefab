@@ -92,7 +92,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1137046220210676}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.71, y: 3.01, z: 0}
+  m_LocalPosition: {x: -7.2343063, y: -4.82287, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4198910625240362}
@@ -127,6 +127,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentOwner: {fileID: 0}
   maxHP: 150
+  decayOvercharge: 10
+  MaxOvercharge: 50
   wavePrefab: {fileID: 114981321980349464, guid: 660433729ed64c4459fe96fd2020e07f,
     type: 2}
   WaveParent: {fileID: 4230509900367856}

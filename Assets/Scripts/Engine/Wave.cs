@@ -170,9 +170,9 @@ public class Wave : MonoBehaviour {
 
 			if(spot != this.startSpot){
 				// Destroy the wave, except if the spot is owned & already taken
-				if(spot.CurrentOwner != this.owner || !spot.IsTaken){
+				//if(spot.CurrentOwner != this.owner || !spot.IsTaken){
 					this.OnDestroyWave();
-				}
+				//}
 			}
 
 		}
@@ -232,7 +232,7 @@ public class Wave : MonoBehaviour {
 		}
 		// Else
 		else {
-
+			
 		}
 
 	}

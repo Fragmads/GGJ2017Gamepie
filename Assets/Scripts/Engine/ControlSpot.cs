@@ -19,9 +19,24 @@ public class ControlSpot : MonoBehaviour {
 	private float currentHP;
 	[SerializeField]
 	private float maxHP;
+
+	[SerializeField]
+	private float decayOvercharge = 10f;
+	[SerializeField]
+	private float MaxOvercharge = 100f;
+
+	private float overcharge = 0f;
+
+
+
 	[Space (15)]
 
-	private float ClickedTime = 0f;
+	private float clickedTime = 0f;
+	public float ClickedTime{
+		get {
+			return this.clickedTime;
+		}
+	}
 
 	private bool clicked = false;
 
@@ -74,8 +89,23 @@ public class ControlSpot : MonoBehaviour {
 		}
 		// If this is an ally wave
 		else if(sender == this.CurrentOwner){
-			
-			this.currentHP = Mathf.Min(this.currentHP+ damageTaken, this.maxHP);
+
+			this.currentHP += damageTaken;
+
+			// If this hit is over heal, store it as overcharge
+			if(this.currentHP > this.maxHP){
+				this.overcharge += this.currentHP - this.maxHP;
+
+				// Clamp the overcharge value
+				this.overcharge = Mathf.Clamp(this.overcharge, 0f, this.MaxOvercharge);
+
+				this.currentHP = this.maxHP;
+
+				// TODO feedback on overcharge
+
+			}
+
+			this.currentHP = Mathf.Min(this.currentHP + damageTaken, this.maxHP);
 
 			// If the player conquered this point
 			if(!this.isTaken && this.currentHP >= GameManager.Instance.NeutralSpotConquerPoint) {
@@ -112,6 +142,8 @@ public class ControlSpot : MonoBehaviour {
 		}
 		this.currentHP = Mathf.Abs(this.currentHP);
 
+		this.overcharge = 0f;
+
 		this.CurrentOwner = contestant;
 		this.isTaken = false;
 
@@ -124,17 +156,18 @@ public class ControlSpot : MonoBehaviour {
 	public void FixedUpdate(){
 
 		// If this is owned by the user
-		if(this.CurrentOwner == GamePlayer.UserPlayer && this.isTaken && this.clicked){
+		if(this.CurrentOwner == GamePlayer.UserPlayer && this.isTaken) {
+			// Handle click time
+			if(this.clicked){
 
-			if(Input.GetMouseButton(0)){
-				this.ClickedTime += Time.fixedDeltaTime;
+				this.clickedTime += Time.fixedDeltaTime;
+			
 			}
-			else{
-				this.clicked = false;
 
-				this.ReleaseWave(this.ClickedTime);
-
-				this.ClickedTime = 0f;
+			// Overcharge 
+			if(this.overcharge > 0f){
+				// Decay the overcharge value
+				Mathf.MoveTowards(this.overcharge, 0f, this.decayOvercharge * Time.fixedDeltaTime);
 
 			}
 
@@ -147,12 +180,16 @@ public class ControlSpot : MonoBehaviour {
 
 	public void OnMouseDown(){
 
+		this.CurrentOwner.ClickingOnSpot(this);
 		this.clicked = true;
 
 	}
 
 
 	public virtual void ReleaseWave(float holdTime){
+
+		this.clicked = false;
+		this.clickedTime = 0f;
 
 		if(!this.isTaken){
 			return;
@@ -174,34 +211,11 @@ public class ControlSpot : MonoBehaviour {
 				waveValue = GameManager.Instance.Level1Value;
 			}
 
+			waveValue += this.overcharge;
+			this.overcharge = 0f;
+
 			Debug.Log("ControlSpot.ReleaseWave - HoldTime : "+holdTime);
 
-			/*
-			List<Wave> waves = new List<Wave>(); 
-
-			Vector3 posSpot = this.transform.position;
-
-			// Make 16 wave, to look like a circle
-			for(int i=0; i<8; ++i){
-
-				Wave w = GameObject.Instantiate<Wave>(this.wavePrefab);
-				w.transform.position = posSpot;
-
-				w.transform.SetParent(this.WaveParent, true);
-
-				w.transform.Rotate(new Vector3(0f, 0f, (i/8f))*360);
-
-				float angle = (i/8f)* (Mathf.PI * 2);
-
-				w.SetDirection(this.CurrentOwner, this, 10000f*(new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0)), waveValue); 
-
-				waves.Add(w);
-			}
-
-			foreach(Wave w in waves){
-				w.SetSiblings(waves);
-			}
-			*/
 			//
 
 			List<Wave> waves = WavePool.Instance.GetWaveImpule();

@@ -23,6 +23,15 @@ public class GamePlayer : MonoBehaviour {
 
 	public List<ControlSpot> ControlledSpots = new List<ControlSpot>();
 
+	private bool isClicking = false;
+	public bool IsClicking{
+		get {
+			return this.isClicking;
+		}
+	}
+
+	private ControlSpot chargingSpot;
+
 	#endregion
 
 	public void Awake(){
@@ -68,5 +77,37 @@ public class GamePlayer : MonoBehaviour {
 		}
 
 	}
+
+	#region ClickLock Handle
+
+	public void ClickingOnSpot(ControlSpot spot){
+
+		// If this spot can be used by the player
+		if(spot != null && spot.CurrentOwner != null && spot.CurrentOwner == this && spot.IsTaken) {
+
+			if(this.isClicking){
+
+				if(this.chargingSpot.CurrentOwner == this && this.chargingSpot.IsTaken){
+					this.chargingSpot.ReleaseWave(this.chargingSpot.ClickedTime);
+				}
+
+				if(spot != this.chargingSpot && spot != null && spot.CurrentOwner != null && spot.CurrentOwner == this && spot.IsTaken){
+					this.chargingSpot = spot;
+				}
+				else{
+					this.chargingSpot = null;
+					this.isClicking = false;
+				}
+
+			}
+			else {
+				this.chargingSpot = spot;
+				this.isClicking = true;
+			}
+		}
+
+	}
+
+	#endregion
 
 }
