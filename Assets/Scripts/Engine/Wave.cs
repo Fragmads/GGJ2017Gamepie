@@ -36,13 +36,20 @@ public class Wave : MonoBehaviour {
 
 	private float distanceTraveled = 0f;
 
-
-
 	[SerializeField]
 	private SpriteRenderer WaveRenderer;
 
 	[SerializeField]
 	private Collider2D collider;
+
+	private int orientation = 0;
+
+	private bool used = false;
+	public bool isUsed {
+		get {
+			return this.used;
+		}
+	}
 
 	#endregion
 
@@ -51,7 +58,7 @@ public class Wave : MonoBehaviour {
 
 		this.collider.enabled = false;
 
-		this.Invoke("AwakeCollider", 0.15f);
+		//this.Invoke("AwakeCollider", 0.15f);
 
 	}
 
@@ -67,14 +74,37 @@ public class Wave : MonoBehaviour {
 		}
 	}
 
-	public void SetDirection(GamePlayer owner, ControlSpot startSpot, Vector3 targetPos, float baseValue){
+	public void SetOrientation(int orientation){
+
+		this.orientation = orientation;
+
+	}
+
+	public void SetDirection(GamePlayer owner, ControlSpot startSpot, float baseValue){
+
+		// This wave is in use
+		this.used = true;
 
 		this.owner = owner;
 		this.startSpot = startSpot;
-		this.targetPos = targetPos;
 		this.Value = baseValue;
 
+		// Re activate the graphical objects
+		this.ShowGraphics();
+
+
+		// Come into the spot transform
+		this.tr.SetParent(this.startSpot.transform);
+		this.tr.localPosition = Vector3.zero;
+
 		this.WaveRenderer.color = this.owner.PlayerMainColor;
+
+		// Set the target direction
+		float angle = (this.orientation/(float)WavePool.Instance.NumberOfWaveByImpulse)* (Mathf.PI * 2);
+		this.targetPos = 10000f*(new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0));
+
+
+		this.Invoke("AwakeCollider", 0.15f);
 	}
 
 
@@ -83,7 +113,7 @@ public class Wave : MonoBehaviour {
 		// TODO
 		// Check if this wave owner still exist, else destroy it
 
-		if(!this.destroyed){
+		if(!this.destroyed && this.isUsed){
 
 			// Move this wave
 			this.tr.position = Vector3.MoveTowards(this.tr.position, this.targetPos, this.MovementSpeed * Time.fixedDeltaTime);
@@ -151,7 +181,7 @@ public class Wave : MonoBehaviour {
 
 	public void OnCollideWave(Wave other){
 
-		Debug.Log("Wave.OnCollideWave - SelfValue "+this.Value+", other value : "+other.Value);
+		//Debug.Log("Wave.OnCollideWave - SelfValue "+this.Value+", other value : "+other.Value);
 
 		float otherValue = other.Value;
 		other.OnCollidedByWave(this);
@@ -217,8 +247,72 @@ public class Wave : MonoBehaviour {
 		this.Value = 0f;
 		this.destroyed = true;
 
+		this.Invoke("ReturnToPool", 0.5f);
+
 		// 
-		GameObject.Destroy(this.gameObject, 0.5f);
+		//GameObject.Destroy(this.gameObject, 0.5f);
 	}
+
+	#region Pooling
+
+	private void ReturnToPool(){
+		this.used = false;
+
+		// Check if all other siblings are done
+		int done = 0;
+		foreach(Wave w in this.siblings){
+
+			if(!w.isUsed){
+				++done;
+			}
+			else{
+				break;
+			}
+
+		}
+
+		// If all siblings are done, return to the Object pool
+		if(done == this.siblings.Count){
+			WavePool.Instance.ReturnWaveImpulse(this.siblings);
+		}
+
+		this.HideGraphics();
+
+	}
+
+	private void HideGraphics(){
+		this.colliderObject.gameObject.SetActive(false);
+
+	}
+
+	private void ShowGraphics(){
+		this.colliderObject.gameObject.SetActive(true);
+
+	}
+
+	public void ResetUsed(){
+
+		this.HideGraphics();
+
+		this.used = false;
+
+		this.owner = null;
+		this.collider.enabled = false;
+		this.collidedList.Clear();
+		this.startSpot = null;
+		this.distanceTraveled = 0f;
+		this.destroyed = false;
+
+		this.colliderObject.transform.localScale = Vector3.one;
+
+		this.tr.SetParent(WavePool.Instance.Holder);
+		this.tr.localPosition = Vector3.zero;
+
+
+
+	}
+
+
+	#endregion
 
 }

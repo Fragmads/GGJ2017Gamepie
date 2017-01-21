@@ -174,9 +174,9 @@ public class ControlSpot : MonoBehaviour {
 				waveValue = GameManager.Instance.Level1Value;
 			}
 
-
 			Debug.Log("ControlSpot.ReleaseWave - HoldTime : "+holdTime);
 
+			/*
 			List<Wave> waves = new List<Wave>(); 
 
 			Vector3 posSpot = this.transform.position;
@@ -201,6 +201,15 @@ public class ControlSpot : MonoBehaviour {
 			foreach(Wave w in waves){
 				w.SetSiblings(waves);
 			}
+			*/
+			//
+
+			List<Wave> waves = WavePool.Instance.GetWaveImpule();
+
+			foreach(Wave w in waves){
+				w.SetDirection(this.CurrentOwner, this, waveValue);
+			}
+
 		}
 		else{
 			Debug.Log("ControlSpot.ReleaseWave - Not enough charge time, do nothing : holdTime : "+holdTime);
