@@ -136,8 +136,15 @@ public class Wave : MonoBehaviour {
 
 			this.colliderObject.transform.localScale = new Vector3(this.distanceTraveled * 1f, 1f, 1f);
 
+
+
 			// Decay
 			this.Value -= this.decaySpeed * Time.fixedDeltaTime;
+
+			// Redefine the color according to the Value left in the wave
+			Color oldCol = this.WaveRenderer.color;
+			float alphaValue = (this.Value+ 40f) /GameManager.Instance.Level3Value;
+			this.WaveRenderer.color = new Color(oldCol.r, oldCol.g, oldCol.b, alphaValue);
 
 			// if this wave have decayed
 			if(this.Value <= 0f){
