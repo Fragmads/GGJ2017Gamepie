@@ -11,7 +11,9 @@ public class AIPlayerRandom : GamePlayer {
 	private float lastChargeTime = 0f;
 
 	[Header ("AIPlayerRandom")]
+	[SerializeField]
 	private float minAdditionnalWait = 1.5f;
+	[SerializeField]
 	private float maxAdditionnalWait = 5f;
 
 	#endregion
