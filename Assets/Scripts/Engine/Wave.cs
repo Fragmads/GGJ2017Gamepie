@@ -332,7 +332,7 @@ public class Wave : MonoBehaviour {
 		this.distanceTraveled = 0f;
 		this.destroyed = false;
 
-		this.colliderObject.transform.localScale = Vector3.one;
+		this.colliderObject.transform.localScale = Vector3.zero;
 
 		this.tr.SetParent(WavePool.Instance.Holder);
 		this.tr.localPosition = Vector3.zero;
