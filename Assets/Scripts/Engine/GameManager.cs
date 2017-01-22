@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -35,6 +36,9 @@ public class GameManager : MonoBehaviour {
 
 	public GameLevel CurrentLevel;
 
+	[SerializeField]
+	public Color PlayerColor;
+
 	[Header("Game Rules")]
 	[Tooltip ("Point at which you conquer a neutral control spot")]
 	public float NeutralSpotConquerPoint = 100f;
@@ -50,6 +54,9 @@ public class GameManager : MonoBehaviour {
 	public float Level1Value = 30f;
 	public float Level2Value = 50f;
 	public float Level3Value = 70f;
+
+	[HideInInspector]
+	public bool ShowLevelSelection = false;
 
 	#endregion
 
@@ -70,6 +77,19 @@ public class GameManager : MonoBehaviour {
 
 
 		#endif
+	}
+
+	public void Start(){
+
+		SceneManager.sceneLoaded += this.OnSceneLoaded;
+
+	}
+
+	private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+
+		// Get next scene
+		this.CurrentLevel = GameObject.FindObjectOfType<GameLevel>();
+
 	}
 
 

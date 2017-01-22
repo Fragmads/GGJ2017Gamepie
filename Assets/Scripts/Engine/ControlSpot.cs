@@ -27,8 +27,6 @@ public class ControlSpot : MonoBehaviour {
 
 	private float overcharge = 0f;
 
-
-
 	[Space (15)]
 
 	private float clickedTime = 0f;
@@ -124,6 +122,7 @@ public class ControlSpot : MonoBehaviour {
 		// Change the color
 		this.isTaken = true;
 		this.clicked = false;
+		this.clickedTime = 0f;
 		this.spotSprite.color = this.CurrentOwner.PlayerMainColor;
 
 		// Release a wave
@@ -153,24 +152,29 @@ public class ControlSpot : MonoBehaviour {
 	}
 
 
-	public void FixedUpdate(){
+	public void Update(){
 
 		// If this is owned by the user
-		if(this.CurrentOwner == GamePlayer.UserPlayer && this.isTaken) {
+		if(this.CurrentOwner == GamePlayer.UserPlayer && this.isTaken && GamePlayer.UserPlayer.IsClicking) {
 			// Handle click time
 			if(this.clicked){
 
-				this.clickedTime += Time.fixedDeltaTime;
+				this.clickedTime += Time.deltaTime;
 			
+				FeedbackManager.Instance.UpdateJaugeBar(this.ClickedTime);
+
 			}
 
 			// Overcharge 
 			if(this.overcharge > 0f){
 				// Decay the overcharge value
-				Mathf.MoveTowards(this.overcharge, 0f, this.decayOvercharge * Time.fixedDeltaTime);
+				Mathf.MoveTowards(this.overcharge, 0f, this.decayOvercharge * Time.deltaTime);
 
 			}
 
+		}
+		else{
+			this.clickedTime = 0f;
 		}
 
 
@@ -179,12 +183,18 @@ public class ControlSpot : MonoBehaviour {
 	#region SendWave
 
 	public void OnMouseDown(){
-
-		this.CurrentOwner.ClickingOnSpot(this);
-		this.clicked = true;
+		
+		if(this.CurrentOwner != null && this.CurrentOwner == GamePlayer.UserPlayer){
+			this.CurrentOwner.ClickingOnSpot(this);
+			this.clicked = true;
+		}
 
 	}
 
+	public void NotClickedAnymore(){
+		this.clicked = false;
+		this.clickedTime = 0f;
+	}
 
 	public virtual void ReleaseWave(float holdTime){
 
@@ -211,8 +221,6 @@ public class ControlSpot : MonoBehaviour {
 				waveValue = GameManager.Instance.Level1Value;
 			}
 
-			waveValue += this.overcharge;
-			this.overcharge = 0f;
 
 			Debug.Log("ControlSpot.ReleaseWave - HoldTime : "+holdTime);
 
@@ -221,15 +229,15 @@ public class ControlSpot : MonoBehaviour {
 			List<Wave> waves = WavePool.Instance.GetWaveImpule();
 
 			foreach(Wave w in waves){
-				w.SetDirection(this.CurrentOwner, this, waveValue);
+				w.SetDirection(this.CurrentOwner, this, waveValue, this.overcharge/2f);
 			}
+
+			this.overcharge = 0f;
 
 		}
 		else{
 			Debug.Log("ControlSpot.ReleaseWave - Not enough charge time, do nothing : holdTime : "+holdTime);
-
 		}
-
 
 	}
 

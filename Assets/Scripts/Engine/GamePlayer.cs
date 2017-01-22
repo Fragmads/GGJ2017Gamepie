@@ -32,6 +32,9 @@ public class GamePlayer : MonoBehaviour {
 
 	private ControlSpot chargingSpot;
 
+	// Current playthrough
+	private int currentLevel;
+
 	#endregion
 
 	public void Awake(){
@@ -68,11 +71,17 @@ public class GamePlayer : MonoBehaviour {
 		if(this.isUser){
 
 			// TODO Game over
+			GameManager.Instance.GameOver();
 
 		}
 		else{
 			// Remove this player from the game, he should stop playing and his wave should be removed
 			GameManager.Instance.CurrentLevel.players.Remove(this);
+
+			// Basic win condition
+			if(GameManager.Instance.CurrentLevel.players.Count < 2 && GameManager.Instance.CurrentLevel.players.Contains(GamePlayer.UserPlayer)){
+				GameManager.Instance.Win();
+			}
 
 		}
 
@@ -93,16 +102,37 @@ public class GamePlayer : MonoBehaviour {
 
 				if(spot != this.chargingSpot && spot != null && spot.CurrentOwner != null && spot.CurrentOwner == this && spot.IsTaken){
 					this.chargingSpot = spot;
+					this.isClicking = true;
+
+					// Clear clicks from other spots
+					foreach(ControlSpot s in this.ControlledSpots){
+						if(s != spot){
+							s.NotClickedAnymore();
+						}
+					}
+
+					FeedbackManager.Instance.DisplayJaugeAtSpot(spot);
 				}
 				else{
 					this.chargingSpot = null;
 					this.isClicking = false;
+					FeedbackManager.Instance.HideJauge();
+
 				}
 
 			}
 			else {
 				this.chargingSpot = spot;
 				this.isClicking = true;
+
+				// Clear clicks from other spots
+				foreach(ControlSpot s in this.ControlledSpots){
+					if(s != spot){
+						s.NotClickedAnymore();
+					}
+				}
+
+				FeedbackManager.Instance.DisplayJaugeAtSpot(spot);
 			}
 		}
 

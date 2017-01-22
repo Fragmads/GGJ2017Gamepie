@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4470442063010466}
   - component: {fileID: 114305761818616588}
   m_Layer: 0
-  m_Name: GamePrefab
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,6 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentLevel: {fileID: 0}
+  PlayerColor: {r: 0, g: 0, b: 1, a: 1}
   NeutralSpotConquerPoint: 100
   NeutralMainColor: {r: 0.9411765, g: 0.9411765, b: 0.9411765, a: 1}
   Level1ChargeTime: 0.75

@@ -18,6 +18,10 @@ public class Wave : MonoBehaviour {
 	[SerializeField]
 	private float decaySpeed = 15f;
 
+	private float overchargeValue = 0f;
+	[SerializeField]
+	private float overchargeBonusSpeed = 2f;
+
 	[Space(15)]
 
 	private Transform tr;
@@ -26,8 +30,6 @@ public class Wave : MonoBehaviour {
 
 	private List<object> collidedList = new List<object>();
 	private List<Wave> siblings = new List<Wave>();
-
-	private WaveGenerator Generator;
 
 	private bool destroyed = false;
 
@@ -50,6 +52,7 @@ public class Wave : MonoBehaviour {
 			return this.used;
 		}
 	}
+
 
 	#endregion
 
@@ -80,7 +83,7 @@ public class Wave : MonoBehaviour {
 
 	}
 
-	public void SetDirection(GamePlayer owner, ControlSpot startSpot, float baseValue){
+	public void SetDirection(GamePlayer owner, ControlSpot startSpot, float baseValue, float overchargeValue = 0f){
 
 		// This wave is in use
 		this.used = true;
@@ -88,6 +91,7 @@ public class Wave : MonoBehaviour {
 		this.owner = owner;
 		this.startSpot = startSpot;
 		this.Value = baseValue;
+		this.overchargeValue = overchargeValue;
 
 		// Re activate the graphical objects
 		this.ShowGraphics();
@@ -116,14 +120,29 @@ public class Wave : MonoBehaviour {
 		if(!this.destroyed && this.isUsed){
 
 			// Move this wave
-			this.tr.position = Vector3.MoveTowards(this.tr.position, this.targetPos, this.MovementSpeed * Time.fixedDeltaTime);
+			float ms = (this.MovementSpeed ) * Time.fixedDeltaTime;
 
-			this.distanceTraveled += this.MovementSpeed * Time.fixedDeltaTime;
+			// if needed apply an overcharge bonus MS
+			if(this.overchargeValue > 0f){
+				this.overchargeValue = Mathf.MoveTowards(this.overchargeValue, 0f, this.decaySpeed * Time.fixedDeltaTime);
+				ms += this.overchargeBonusSpeed * Time.fixedDeltaTime;
+			}
+
+			this.tr.position = Vector3.MoveTowards(this.tr.position, this.targetPos, ms);
+
+			this.distanceTraveled += ms;
 
 			this.colliderObject.transform.localScale = new Vector3(this.distanceTraveled * 1f, 1f, 1f);
 
+
+
 			// Decay
 			this.Value -= this.decaySpeed * Time.fixedDeltaTime;
+
+			// Redefine the color according to the Value left in the wave
+			Color oldCol = this.WaveRenderer.color;
+			float alphaValue = (this.Value+ 40f) /GameManager.Instance.Level3Value;
+			this.WaveRenderer.color = new Color(oldCol.r, oldCol.g, oldCol.b, alphaValue);
 
 			// if this wave have decayed
 			if(this.Value <= 0f){
