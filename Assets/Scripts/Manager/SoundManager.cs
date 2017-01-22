@@ -97,7 +97,7 @@ public class SoundManager : MonoBehaviour
 		if(SoundManager.instance == null){
 
 			SoundManager.instance = this;
-			GameObject.DontDestroyOnLoad(this.gameObject);
+			GameObject.DontDestroyOnLoad(this.transform.root);
 
 		}
 		else{
@@ -108,6 +108,9 @@ public class SoundManager : MonoBehaviour
         SoundManager.instance = this;
 
         this.InitSoundManager();
+
+
+		SceneManager.sceneLoaded += this.searchAudioListener;
 
     }
 
@@ -124,8 +127,8 @@ public class SoundManager : MonoBehaviour
             // Add the Audio source to this god object
 
             this.PlayerSource = this.gameObject.AddComponent<AudioSource>();
-            this.WorldSource = this.gameObject.AddComponent<AudioSource>();
-            this.EnnemySource = this.gameObject.AddComponent<AudioSource>();
+           // this.WorldSource = this.gameObject.AddComponent<AudioSource>();
+           // this.EnnemySource = this.gameObject.AddComponent<AudioSource>();
             this.JingleSource = this.gameObject.AddComponent<AudioSource>();
 
             this.MusicSource = this.gameObject.AddComponent<AudioSource>();
@@ -141,6 +144,10 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+	private void searchAudioListener (Scene osef, LoadSceneMode mode){
+		this.searchAudioListener();
+	}
+		
     private void searchAudioListener()
     {
 
@@ -384,7 +391,7 @@ public class SoundManager : MonoBehaviour
 		{            
 
 			AudioClip ac = this.WaveLaunch[Random.Range(0, this.WaveLaunch.Count)];
-			this.WorldSource.PlayOneShot(ac);
+			this.PlayerSource.PlayOneShot(ac);
 
 		}
 
@@ -436,6 +443,23 @@ public class SoundManager : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Play one charge sound, randomly selected from the list
+	/// </summary>
+	public void PlayCharge()
+	{
+
+		// If the hero can play a sound
+		if (this.SoundOn && this.Charge.Count > 0 && this.audioListener != null)
+		{            
+
+			AudioClip ac = this.Charge[Random.Range(0, this.Charge.Count)];
+			this.WorldSource.PlayOneShot(ac);
+
+		}
+
+	}
+
+	/// <summary>
 	/// Play one spot taken sound, randomly selected from the list
 	/// </summary>
 	public void PlaySpotTaken()
@@ -446,7 +470,7 @@ public class SoundManager : MonoBehaviour
 		{            
 
 			AudioClip ac = this.SpotTaken[Random.Range(0, this.SpotTaken.Count)];
-			this.WorldSource.PlayOneShot(ac);
+			this.EnnemySource.PlayOneShot(ac);
 
 		}
 
@@ -462,7 +486,7 @@ public class SoundManager : MonoBehaviour
 		{            
 
 			AudioClip ac = this.OverchargeWave[Random.Range(0, this.OverchargeWave.Count)];
-			this.PlayerSource.PlayOneShot(ac);
+			this.WorldSource.PlayOneShot(ac);
 
 		}
 	}

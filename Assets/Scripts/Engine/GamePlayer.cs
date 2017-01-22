@@ -47,6 +47,9 @@ public class GamePlayer : MonoBehaviour {
 			}
 
 			GamePlayer.UserPlayer = this;
+
+			this.PlayerMainColor = GameManager.Instance.PlayerColor;
+
 		}
 
 	}
@@ -112,6 +115,9 @@ public class GamePlayer : MonoBehaviour {
 					}
 
 					FeedbackManager.Instance.DisplayJaugeAtSpot(spot);
+
+					// Play the loading sound
+					SoundManager.Instance.PlayCharge();
 				}
 				else{
 					this.chargingSpot = null;
@@ -132,6 +138,8 @@ public class GamePlayer : MonoBehaviour {
 					}
 				}
 
+				// Play the loading sound
+				SoundManager.Instance.PlayCharge();
 				FeedbackManager.Instance.DisplayJaugeAtSpot(spot);
 			}
 		}
