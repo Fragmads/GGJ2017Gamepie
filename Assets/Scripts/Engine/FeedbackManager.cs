@@ -69,10 +69,10 @@ public class FeedbackManager : MonoBehaviour {
 			barLength = holdTime/ GameManager.Instance.Level1ChargeTime * (1/3f);
 		}
 		else if(holdTime < GameManager.Instance.Level2ChargeTime){
-			barLength = (holdTime/ GameManager.Instance.Level2ChargeTime * (1/3f) + (1/3f));
+			barLength = ((holdTime - GameManager.Instance.Level1ChargeTime)/ (GameManager.Instance.Level2ChargeTime - GameManager.Instance.Level1ChargeTime) * (1/3f) + (1/3f));
 		}
 		else{
-			barLength = Mathf.Clamp01((holdTime -  GameManager.Instance.Level2ChargeTime) / GameManager.Instance.Level3ChargeTime * (1/3f) + (2/3f));
+			barLength = Mathf.Clamp01((holdTime -  GameManager.Instance.Level2ChargeTime) / (GameManager.Instance.Level3ChargeTime - GameManager.Instance.Level2ChargeTime) * (1/3f) + (2/3f));
 		}
 
 		this.jaugeBar.localScale = new Vector3(1f, barLength, 1f);
