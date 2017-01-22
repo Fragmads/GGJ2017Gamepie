@@ -9,7 +9,7 @@ public class GameLevel : MonoBehaviour {
 
 	public List<GamePlayer> players = new List<GamePlayer>();
 
-	public Scene NextLevel;
+	public string NextLevel;
 
 	#endregion
 

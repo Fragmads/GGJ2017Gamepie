@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour {
 	private void startNextLevel(){
 
 		if(this.CurrentLevel != null && this.CurrentLevel.NextLevel != null){
-			SceneManager.LoadScene(this.CurrentLevel.NextLevel.buildIndex);
+			SceneManager.LoadScene(this.CurrentLevel.NextLevel);
 		}
 
 	}
