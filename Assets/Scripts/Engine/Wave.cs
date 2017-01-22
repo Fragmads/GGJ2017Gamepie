@@ -155,8 +155,13 @@ public class Wave : MonoBehaviour {
 
 	public void OnTriggerEnter2D(Collider2D col){
 			
+		if(col.tag == "obstacle"){
 
-		if(col.tag == "wave" && col.GetComponentInParent<Wave>() != null){
+			this.Value = 0f;
+			this.OnDestroyWave();
+
+		}
+		else if(col.tag == "wave" && col.GetComponentInParent<Wave>() != null){
 
 			Wave w = col.GetComponentInParent<Wave>();
 
