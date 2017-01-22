@@ -68,7 +68,7 @@ Transform:
   m_GameObject: {fileID: 1643398953430140}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 4828346541506784}
   m_RootOrder: 0
@@ -80,7 +80,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1359546430504818}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.800247, y: 0.20030126, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4828346541506784}
@@ -148,6 +148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MovementSpeed: 0.8
   decaySpeed: 40
+  overchargeBonusSpeed: 2
   colliderObject: {fileID: 1921200812224936}
   WaveRenderer: {fileID: 212696545712635232}
   collider: {fileID: 61053309294860346}
@@ -182,7 +183,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 53dca842180e3cb4b8c3d13dc135b049, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 617e67b01099f0248b957cf2cbaebfbd, type: 3}
   m_Color: {r: 0, g: 1, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0

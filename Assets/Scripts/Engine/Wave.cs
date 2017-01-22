@@ -132,8 +132,9 @@ public class Wave : MonoBehaviour {
 
 			this.distanceTraveled += ms;
 
-			this.colliderObject.transform.localScale = new Vector3(this.distanceTraveled * 1f, 1f, 1f);
+			this.colliderObject.transform.localScale = new Vector3(this.distanceTraveled * 1f, this.distanceTraveled, 1f);
 
+			this.WaveRenderer.transform.position = this.startSpot.transform.position;
 
 
 			// Decay
