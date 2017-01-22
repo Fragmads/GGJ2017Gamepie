@@ -22,6 +22,8 @@ public class SoundManager : MonoBehaviour
     // Properties
     //
     
+	[Header ("SoundManager")]
+
     public bool SoundOn = true;
     public bool MusicOn = true;
     private bool musicPlaying = false;
@@ -31,27 +33,27 @@ public class SoundManager : MonoBehaviour
 
     //
     [Header("Sound Lists")]
-    public List<AudioClip> ClickMenu = new List<AudioClip>();
-    public List<AudioClip> PopupOpen = new List<AudioClip>();
-    public List<AudioClip> PopupClose = new List<AudioClip>();
 
-    public List<AudioClip> LaunchFromPlanet = new List<AudioClip>();
-    public List<AudioClip> ValidationPlanet = new List<AudioClip>();
-
-    public List<AudioClip> DeathPlayer = new List<AudioClip>();
-    public List<AudioClip> DeathGhost = new List<AudioClip>();
-    [Tooltip("how far can we hear the GhostDeath")]
-    public float GhostDeathRange = 5f;
-
-    public List<AudioClip> RocketSound = new List<AudioClip>();
-
+    public List<AudioClip> WaveLaunch = new List<AudioClip>();
+	public List<AudioClip> Charge = new List<AudioClip>();
+	public List<AudioClip> SpotTaken = new List<AudioClip>();
+	public List<AudioClip> WaveCollision = new List<AudioClip>();
+	public List<AudioClip> OverchargeWave = new List<AudioClip>();
+   
+	// Legacy
+	[Space (15)]
+	public List<AudioClip> ClickMenu = new List<AudioClip>();
+	public List<AudioClip> PopupOpen = new List<AudioClip>();
+	public List<AudioClip> PopupClose = new List<AudioClip>();
 
     [Header("Jingles")]
     public List<AudioClip> WinGame = new List<AudioClip>();
     public List<AudioClip> LooseGame = new List<AudioClip>();
 
+	/*
     public List<AudioClip> BonusUsed = new List<AudioClip>();
     public List<AudioClip> BuyBack = new List<AudioClip>();
+    */
 
     [Tooltip("The music will lower to this volume while a jingle is playing")]
     [Range(0f, 1f)]
@@ -65,7 +67,7 @@ public class SoundManager : MonoBehaviour
     // AudioSource
     [Header("Audio Source")]
     public AudioSource PlayerSource;
-    public AudioSource GhostSource;
+    public AudioSource EnnemySource;
     public AudioSource WorldSource;
     public AudioSource JingleSource;
 
@@ -87,8 +89,7 @@ public class SoundManager : MonoBehaviour
 
     private float hintPopTimer = -1f;
 
-    // Methods
-    //
+	#region Methods
     
     void Awake()
     {
@@ -96,7 +97,7 @@ public class SoundManager : MonoBehaviour
 		if(SoundManager.instance == null){
 
 			SoundManager.instance = this;
-			GameObject.DontDestroyOnLoad(this.gameObject);
+			GameObject.DontDestroyOnLoad(this.transform.root);
 
 		}
 		else{
@@ -107,6 +108,9 @@ public class SoundManager : MonoBehaviour
         SoundManager.instance = this;
 
         this.InitSoundManager();
+
+
+		SceneManager.sceneLoaded += this.searchAudioListener;
 
     }
 
@@ -123,8 +127,8 @@ public class SoundManager : MonoBehaviour
             // Add the Audio source to this god object
 
             this.PlayerSource = this.gameObject.AddComponent<AudioSource>();
-            this.WorldSource = this.gameObject.AddComponent<AudioSource>();
-            this.GhostSource = this.gameObject.AddComponent<AudioSource>();
+           // this.WorldSource = this.gameObject.AddComponent<AudioSource>();
+           // this.EnnemySource = this.gameObject.AddComponent<AudioSource>();
             this.JingleSource = this.gameObject.AddComponent<AudioSource>();
 
             this.MusicSource = this.gameObject.AddComponent<AudioSource>();
@@ -140,6 +144,10 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+	private void searchAudioListener (Scene osef, LoadSceneMode mode){
+		this.searchAudioListener();
+	}
+		
     private void searchAudioListener()
     {
 
@@ -241,6 +249,8 @@ public class SoundManager : MonoBehaviour
         this.searchAudioListener();
     }
 
+	#endregion
+
     #region Music
     //
     // Music
@@ -303,7 +313,7 @@ public class SoundManager : MonoBehaviour
 
     public void PlayMenuMusic()
     {
-        this.StopRocketSound();
+       // this.StopRocketSound();
 
         this.musicPlaying = false;
 
@@ -328,7 +338,7 @@ public class SoundManager : MonoBehaviour
 
     public void PlayInGameMusic()
     {
-        this.StopRocketSound();
+        //this.StopRocketSound();
 
         this.musicPlaying = false;
 
@@ -369,63 +379,180 @@ public class SoundManager : MonoBehaviour
     // Play methods
     //
 
-    /// <summary>
-    /// Play one click menu sound, randomly selected from the list
-    /// </summary>
-    public void PlayClickMenu()
-    {
+    
+	/// <summary>
+	/// Play one wave launch sound, randomly selected from the list
+	/// </summary>
+	public void PlayWaveLaunch()
+	{
 
-        // If the hero can play a sound
-        if (this.SoundOn && this.ClickMenu.Count > 0 && this.audioListener != null)
-        {
+		// If the hero can play a sound
+		if (this.SoundOn && this.WaveLaunch.Count > 0 && this.audioListener != null)
+		{            
 
-            //Debug.Log("SoundManager.PlayHeroHit - Hero hit sound");
+			AudioClip ac = this.WaveLaunch[Random.Range(0, this.WaveLaunch.Count)];
+			this.PlayerSource.PlayOneShot(ac);
 
-            AudioClip ac = this.ClickMenu[Random.Range(0, this.ClickMenu.Count)];
-            this.GhostSource.PlayOneShot(ac);
+		}
 
-        }
+	}
 
-    }
+	/// <summary>
+	/// Play one charge sound, randomly selected from the list. Will loop until the method StopChargeSound is called
+	/// </summary>
+	public void StartChargeSound()
+	{
 
-    /// <summary>
-    /// Play one popup open sound, randomly selected from the list
-    /// </summary>
-    public void PlayPopupOpen()
-    {
+		// If the hero can play a sound
+		if (this.SoundOn && this.Charge.Count > 0 && this.audioListener != null)
+		{
 
-        // If the hero can play a sound
-        if (this.SoundOn && this.PopupOpen.Count > 0 && this.audioListener != null)
-        {
+			AudioClip ac = this.Charge[Random.Range(0, this.Charge.Count)];
 
-            //Debug.Log("SoundManager.PlayHeroHit - Hero hit sound");
+			this.PlayerSource.clip = ac;
+			this.PlayerSource.loop = true;
 
-            AudioClip ac = this.PopupOpen[Random.Range(0, this.PopupOpen.Count)];
-            this.GhostSource.PlayOneShot(ac);
+			this.PlayerSource.Play();
 
-        }
+		}
 
-    }
+	}
 
-    /// <summary>
-    /// Play one popup close sound, randomly selected from the list
-    /// </summary>
-    public void PlayPopupClose()
-    {
+	public void StopChargeSound() {
 
-        // If the hero can play a sound
-        if (this.SoundOn && this.PopupClose.Count > 0 && this.audioListener != null)
-        {
+		this.PlayerSource.Stop();
 
-            //Debug.Log("SoundManager.PlayHeroHit - Hero hit sound");
+	}
 
-            AudioClip ac = this.PopupClose[Random.Range(0, this.PopupClose.Count)];
-            this.GhostSource.PlayOneShot(ac);
 
-        }
+	/// <summary>
+	/// Play one wave collision sound, randomly selected from the list
+	/// </summary>
+	public void PlayWaveCollision()
+	{
 
-    }
+		// If the hero can play a sound
+		if (this.SoundOn && this.WaveCollision.Count > 0 && this.audioListener != null)
+		{            
 
+			AudioClip ac = this.WaveCollision[Random.Range(0, this.WaveCollision.Count)];
+			this.EnnemySource.PlayOneShot(ac);
+
+		}
+
+	}
+
+	/// <summary>
+	/// Play one charge sound, randomly selected from the list
+	/// </summary>
+	public void PlayCharge()
+	{
+
+		// If the hero can play a sound
+		if (this.SoundOn && this.Charge.Count > 0 && this.audioListener != null)
+		{            
+
+			AudioClip ac = this.Charge[Random.Range(0, this.Charge.Count)];
+			this.WorldSource.PlayOneShot(ac);
+
+		}
+
+	}
+
+	/// <summary>
+	/// Play one spot taken sound, randomly selected from the list
+	/// </summary>
+	public void PlaySpotTaken()
+	{
+
+		// If the hero can play a sound
+		if (this.SoundOn && this.SpotTaken.Count > 0 && this.audioListener != null)
+		{            
+
+			AudioClip ac = this.SpotTaken[Random.Range(0, this.SpotTaken.Count)];
+			this.EnnemySource.PlayOneShot(ac);
+
+		}
+
+	}
+
+	/// <summary>
+	/// Play one spot taken sound, randomly selected from the list
+	/// </summary>
+	public void PlayOverchargeWave()
+	{
+		// If the hero can play a sound
+		if (this.SoundOn && this.OverchargeWave.Count > 0 && this.audioListener != null)
+		{            
+
+			AudioClip ac = this.OverchargeWave[Random.Range(0, this.OverchargeWave.Count)];
+			this.WorldSource.PlayOneShot(ac);
+
+		}
+	}
+
+	// Legacy menu sound
+
+	/// <summary>
+	/// Play one click menu sound, randomly selected from the list
+	/// </summary>
+	public void PlayClickMenu()
+	{
+
+		// If the hero can play a sound
+		if (this.SoundOn && this.ClickMenu.Count > 0 && this.audioListener != null)
+		{
+
+			//Debug.Log("SoundManager.PlayHeroHit - Hero hit sound");
+
+			AudioClip ac = this.ClickMenu[Random.Range(0, this.ClickMenu.Count)];
+			this.WorldSource.PlayOneShot(ac);
+
+		}
+
+	}
+
+	/// <summary>
+	/// Play one popup open sound, randomly selected from the list
+	/// </summary>
+	public void PlayPopupOpen()
+	{
+
+		// If the hero can play a sound
+		if (this.SoundOn && this.PopupOpen.Count > 0 && this.audioListener != null)
+		{
+
+			//Debug.Log("SoundManager.PlayHeroHit - Hero hit sound");
+
+			AudioClip ac = this.PopupOpen[Random.Range(0, this.PopupOpen.Count)];
+			this.WorldSource.PlayOneShot(ac);
+
+		}
+
+	}
+
+	/// <summary>
+	/// Play one popup close sound, randomly selected from the list
+	/// </summary>
+	public void PlayPopupClose()
+	{
+
+		// If the hero can play a sound
+		if (this.SoundOn && this.PopupClose.Count > 0 && this.audioListener != null)
+		{
+
+			//Debug.Log("SoundManager.PlayHeroHit - Hero hit sound");
+
+			AudioClip ac = this.PopupClose[Random.Range(0, this.PopupClose.Count)];
+			this.WorldSource.PlayOneShot(ac);
+
+		}
+
+	}
+
+
+	/*
+	 * 
     /// <summary>
     /// Play one launch from planet sound, randomly selected from the list
     /// </summary>
@@ -524,10 +651,13 @@ public class SoundManager : MonoBehaviour
 
     }
 
+	*/
 
     #endregion
 
     #region Jingles
+
+
 
     /// <summary>
     /// Play one Win game jingle, randomly selected from the list
@@ -567,6 +697,8 @@ public class SoundManager : MonoBehaviour
 
     }
 
+	/*
+
     /// <summary>
     /// Play one bonus used jingle, randomly selected from the list
     /// </summary>
@@ -604,6 +736,8 @@ public class SoundManager : MonoBehaviour
         }
 
     }
+
+	*/
 
     #endregion
 

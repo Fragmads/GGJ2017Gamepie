@@ -97,10 +97,24 @@ public class GameManager : MonoBehaviour {
 
 		Debug.Log("GameManager.GameOver");
 
+		SoundManager.Instance.PlayLooseGame();
+
 	}
 
 	public void Win(){
 		Debug.Log("GameManager.Win");
+
+		SoundManager.Instance.PlayWinGame();
+
+		this.Invoke("startNextLevel", 1.5f);
+
+	}
+
+	private void startNextLevel(){
+
+		if(this.CurrentLevel != null && this.CurrentLevel.NextLevel != null){
+			SceneManager.LoadScene(this.CurrentLevel.NextLevel.buildIndex);
+		}
 
 	}
 

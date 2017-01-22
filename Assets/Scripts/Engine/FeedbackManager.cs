@@ -60,6 +60,7 @@ public class FeedbackManager : MonoBehaviour {
 
 		this.jaugeBar.localScale = new Vector3(1f, 0f, 1f);
 
+
 	}
 
 	public void UpdateJaugeBar(float holdTime){
@@ -81,7 +82,6 @@ public class FeedbackManager : MonoBehaviour {
 
 	public void HideJauge(){
 		this.jaugeObject.gameObject.SetActive(false);
-
 	}
 
 }

@@ -217,6 +217,10 @@ public class Wave : MonoBehaviour {
 		// If those are ennemies wave
 		if(this.owner != other.owner){
 
+			if(this.owner == GamePlayer.UserPlayer){
+				SoundManager.Instance.PlayWaveCollision();
+			}
+
 			this.Value -= otherValue;
 
 			// Destroy this wave

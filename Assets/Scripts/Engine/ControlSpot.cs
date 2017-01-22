@@ -137,6 +137,12 @@ public class ControlSpot : MonoBehaviour {
 	public void OnGoesNeutral(GamePlayer contestant){
 
 		if(this.CurrentOwner != null){
+
+			// If this is a user spot that is lost
+			if(this.CurrentOwner == GamePlayer.UserPlayer){
+				SoundManager.Instance.PlaySpotTaken();
+			}
+
 			this.CurrentOwner.OnLooseSpot(this);
 		}
 		this.currentHP = Mathf.Abs(this.currentHP);
@@ -223,6 +229,17 @@ public class ControlSpot : MonoBehaviour {
 
 
 			Debug.Log("ControlSpot.ReleaseWave - HoldTime : "+holdTime);
+
+			// PLay the wave launch sound
+			if(this.CurrentOwner != null && this.CurrentOwner == GamePlayer.UserPlayer){
+
+				if(this.overcharge > 0f){
+					SoundManager.Instance.PlayOverchargeWave();
+					//SoundManager.Instance.PlayWaveLaunch();
+				}
+
+				SoundManager.Instance.PlayWaveLaunch();
+			}
 
 			//
 
