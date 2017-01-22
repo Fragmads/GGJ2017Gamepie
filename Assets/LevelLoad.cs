@@ -34,7 +34,7 @@ public class LevelLoad : MonoBehaviour {
 			SceneManager.LoadScene ("level7");
 			break;
 		case "Lvl8":
-			SceneManager.LoadScene ("level10");
+			SceneManager.LoadScene ("LevelAlex2");
 			break;
 		case "Lvl7":
 			SceneManager.LoadScene ("level9");
