@@ -146,10 +146,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aae38df80bd1f8469356594f3fb326c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 1
-  Value: 30
-  colliderObject: {fileID: 1921200812224936}
+  MovementSpeed: 0.8
   decaySpeed: 40
+  colliderObject: {fileID: 1921200812224936}
   WaveRenderer: {fileID: 212696545712635232}
   collider: {fileID: 61053309294860346}
 --- !u!212 &212696545712635232
