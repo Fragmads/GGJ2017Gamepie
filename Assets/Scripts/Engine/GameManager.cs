@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -54,6 +55,9 @@ public class GameManager : MonoBehaviour {
 	public float Level2Value = 50f;
 	public float Level3Value = 70f;
 
+	[HideInInspector]
+	public bool ShowLevelSelection = false;
+
 	#endregion
 
 	[Header ("Debug")]
@@ -73,6 +77,19 @@ public class GameManager : MonoBehaviour {
 
 
 		#endif
+	}
+
+	public void Start(){
+
+		SceneManager.sceneLoaded += this.OnSceneLoaded;
+
+	}
+
+	private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+
+		// Get next scene
+		this.CurrentLevel = GameObject.FindObjectOfType<GameLevel>();
+
 	}
 
 
