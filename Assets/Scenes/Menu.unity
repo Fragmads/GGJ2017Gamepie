@@ -209,36 +209,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114305761818616588, guid: b64d9a9b0174f8c40b70d09737734448,
-        type: 2}
-      propertyPath: Level1ChargeTime
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114305761818616588, guid: b64d9a9b0174f8c40b70d09737734448,
-        type: 2}
-      propertyPath: Level2ChargeTime
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114305761818616588, guid: b64d9a9b0174f8c40b70d09737734448,
-        type: 2}
-      propertyPath: Level3ChargeTime
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114305761818616588, guid: b64d9a9b0174f8c40b70d09737734448,
-        type: 2}
-      propertyPath: Level1Value
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 114305761818616588, guid: b64d9a9b0174f8c40b70d09737734448,
-        type: 2}
-      propertyPath: Level2Value
-      value: 120
-      objectReference: {fileID: 0}
-    - target: {fileID: 114305761818616588, guid: b64d9a9b0174f8c40b70d09737734448,
-        type: 2}
-      propertyPath: Level3Value
-      value: 200
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b64d9a9b0174f8c40b70d09737734448, type: 2}
   m_IsPrefabParent: 0
