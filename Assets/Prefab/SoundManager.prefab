@@ -220,6 +220,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d43ac26222e6509468d5c54d4df916bb, type: 3}
   - {fileID: 8300000, guid: 4342e21597ace3444bf5c50f4ee60070, type: 3}
   - {fileID: 8300000, guid: a97ad577626f89945afe381387877377, type: 3}
+  - {fileID: 8300000, guid: e190ce6d818981846a27a51dd0cffa88, type: 3}
+  - {fileID: 8300000, guid: 9f52f62da4d102943915e9892819c248, type: 3}
+  - {fileID: 8300000, guid: 67b1ad3926aee1e4189649d3de827829, type: 3}
+  - {fileID: 8300000, guid: 30faaf9dcc1197241be6dc8fe548200a, type: 3}
+  - {fileID: 8300000, guid: 46e08ffb6da6e6f4ab1c846f3be1e7d4, type: 3}
+  - {fileID: 8300000, guid: 12600a4899896b943a97bb962065a146, type: 3}
+  - {fileID: 8300000, guid: 5a796048def265843bb2642eee0d3a5e, type: 3}
   Charge:
   - {fileID: 8300000, guid: dcaac52b7ac42584a8cc49a068a669e1, type: 3}
   SpotTaken:
