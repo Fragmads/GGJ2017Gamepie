@@ -228,6 +228,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9c257d881f8629c4a90550008a0fb244, type: 3}
   OverchargeWave:
   - {fileID: 8300000, guid: bacfb9b895295d44181ffe3b57d0ba04, type: 3}
+  - {fileID: 8300000, guid: ebf004f95beb84140843c78f76fd8295, type: 3}
+  - {fileID: 8300000, guid: 77c6880225148094299c3988e67f58c1, type: 3}
+  - {fileID: 8300000, guid: d20d72ccfd67ce8478c66a6d9fb5ab34, type: 3}
   ClickMenu: []
   PopupOpen: []
   PopupClose: []
