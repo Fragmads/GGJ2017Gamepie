@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour {
 
 		SoundManager.Instance.PlayLooseGame();
 
-		this.Invoke("resetLevel", 1.5f);
+		this.Invoke("resetLevel", 2f);
 
 	}
 
@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour {
 
 		SoundManager.Instance.PlayWinGame();
 
-		this.Invoke("startNextLevel", 1.5f);
+		this.Invoke("startNextLevel", 2f);
 
 	}
 
