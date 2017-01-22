@@ -75,6 +75,15 @@ public class GameManager : MonoBehaviour {
 
 		}
 
+		if(Input.GetKeyDown(KeyCode.W)){
+			this.Win();
+
+		}
+
+		if (Input.GetKeyDown(KeyCode.L)){
+			this.GameOver();
+		}
+
 
 		#endif
 	}
@@ -90,6 +99,8 @@ public class GameManager : MonoBehaviour {
 		// Get next scene
 		this.CurrentLevel = GameObject.FindObjectOfType<GameLevel>();
 
+		FeedbackManager.Instance.HideJauge();
+
 	}
 
 
@@ -98,6 +109,8 @@ public class GameManager : MonoBehaviour {
 		Debug.Log("GameManager.GameOver");
 
 		SoundManager.Instance.PlayLooseGame();
+
+		this.Invoke("resetLevel", 1.5f);
 
 	}
 
@@ -114,7 +127,18 @@ public class GameManager : MonoBehaviour {
 
 		if(this.CurrentLevel != null && this.CurrentLevel.NextLevel != null){
 			SceneManager.LoadScene(this.CurrentLevel.NextLevel);
+
+			if(this.CurrentLevel.NextLevel == "Menu"){
+				this.ShowLevelSelection = true;
+			}
+
 		}
+
+	}
+
+	private void resetLevel(){
+
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
 	}
 
