@@ -28,7 +28,7 @@ public class LevelLoad : MonoBehaviour {
 	{
 		switch (Lvlname) {
 		case "Lvl10":
-			SceneManager.LoadScene ("level8");
+			SceneManager.LoadScene ("LevelVal");
 			break;
 		case "Lvl9":
 			SceneManager.LoadScene ("level7");
