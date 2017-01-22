@@ -516,12 +516,6 @@ Prefab:
       propertyPath: m_Name
       value: Spot (27)
       objectReference: {fileID: 0}
-    - target: {fileID: 212615627475462776, guid: 712e992ed19389e4eb3db74fa295a905,
-        type: 2}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: f5bf7385cf33ab84aa1bccd29ded5923,
-        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 712e992ed19389e4eb3db74fa295a905, type: 2}
   m_IsPrefabParent: 0

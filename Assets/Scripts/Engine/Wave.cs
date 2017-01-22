@@ -151,6 +151,14 @@ public class Wave : MonoBehaviour {
 			}
 
 		}
+		// If this wave is destroying
+		else if(this.destroyed &&this.isUsed){
+			// Redefine the color according to the Value left in the wave
+			Color oldCol = this.WaveRenderer.color;
+			float alphaValue = Mathf.MoveTowards(oldCol.a, 0f, Time.fixedDeltaTime * 1.5f);
+			this.WaveRenderer.color = new Color(oldCol.r, oldCol.g, oldCol.b, alphaValue);
+
+		}
 
 	}
 
