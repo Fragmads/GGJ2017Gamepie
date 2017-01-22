@@ -26,4 +26,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/level7.unity
   - enabled: 1
+    path: Assets/Scenes/LevelAlex2.unity
+  - enabled: 1
     path: Assets/Scenes/LevelVal.unity

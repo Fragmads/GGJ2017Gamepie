@@ -1080,7 +1080,7 @@ Prefab:
     - target: {fileID: 114872829803584626, guid: 73dcc48ce72b89c48b676da18c1bb6bc,
         type: 2}
       propertyPath: NextLevel
-      value: level8
+      value: levelVal
       objectReference: {fileID: 0}
     - target: {fileID: 114872829803584626, guid: 73dcc48ce72b89c48b676da18c1bb6bc,
         type: 2}
