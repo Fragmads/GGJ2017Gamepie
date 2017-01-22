@@ -124,7 +124,7 @@ public class Wave : MonoBehaviour {
 
 			// if needed apply an overcharge bonus MS
 			if(this.overchargeValue > 0f){
-				this.overchargeValue = Mathf.MoveTowards(this.overchargeValue, 0f, this.decaySpeed * Time.fixedDeltaTime);
+				this.overchargeValue = Mathf.MoveTowards(this.overchargeValue, 0f, 0.66f * this.decaySpeed * Time.fixedDeltaTime);
 				ms += this.overchargeBonusSpeed * Time.fixedDeltaTime;
 			}
 

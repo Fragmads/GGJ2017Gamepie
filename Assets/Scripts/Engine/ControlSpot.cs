@@ -47,11 +47,16 @@ public class ControlSpot : MonoBehaviour {
 	[SerializeField]
 	private SpriteRenderer spotSprite;
 
+	[SerializeField]
+	private SpriteRenderer OverchargeFeedback;
+
 	#endregion
 
 	private void Start(){
 
 		this.currentHP = this.maxHP;
+
+		this.OverchargeFeedback.enabled = false;
 
 		if(this.CurrentOwner != null){
 			// Conquered, but don't release a wave yet
@@ -124,6 +129,7 @@ public class ControlSpot : MonoBehaviour {
 		this.clicked = false;
 		this.clickedTime = 0f;
 		this.spotSprite.color = this.CurrentOwner.PlayerMainColor;
+		this.OverchargeFeedback.color = this.CurrentOwner.PlayerMainColor;
 
 		// Release a wave
 		if(releaseWave){
@@ -154,6 +160,7 @@ public class ControlSpot : MonoBehaviour {
 
 		// Change the color
 		this.spotSprite.color = GameManager.Instance.NeutralMainColor;
+		this.OverchargeFeedback.color = GameManager.Instance.NeutralMainColor;
 
 	}
 
@@ -171,18 +178,29 @@ public class ControlSpot : MonoBehaviour {
 
 			}
 
-			// Overcharge 
-			if(this.overcharge > 0f){
-				// Decay the overcharge value
-				Mathf.MoveTowards(this.overcharge, 0f, this.decayOvercharge * Time.deltaTime);
-
-			}
 
 		}
 		else{
 			this.clickedTime = 0f;
 		}
 
+		// Overcharge 
+		if(this.overcharge > 0f){
+			// Decay the overcharge value
+
+			this.OverchargeFeedback.enabled = true;
+
+			this.overcharge = Mathf.MoveTowards(this.overcharge, 0f, this.decayOvercharge * Time.deltaTime);
+
+			Color oldCol = this.OverchargeFeedback.color;
+			float alphaVal = (this.overcharge/this.MaxOvercharge) * 1f ;
+			this.OverchargeFeedback.color = new Color(oldCol.r, oldCol.g, oldCol.b, alphaVal);
+
+
+		}
+		else{
+			this.OverchargeFeedback.enabled = false;
+		}
 
 	}
 

@@ -167,11 +167,6 @@ Prefab:
       propertyPath: m_Name
       value: Spot player1
       objectReference: {fileID: 0}
-    - target: {fileID: 114152229539719700, guid: b339677443e74434eb5a7c366e804215,
-        type: 2}
-      propertyPath: CurrentOwner
-      value: 
-      objectReference: {fileID: 1213733560}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b339677443e74434eb5a7c366e804215, type: 2}
   m_IsPrefabParent: 0
