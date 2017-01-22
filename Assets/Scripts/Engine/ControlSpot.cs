@@ -118,7 +118,7 @@ public class ControlSpot : MonoBehaviour {
 
 
 
-	public void OnConquered(bool releaseWave = true){
+	public virtual void OnConquered(bool releaseWave = true){
 		// Change the color
 		this.isTaken = true;
 		this.clicked = false;
