@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayButMenu : MonoBehaviour {
-
+	public GameObject LvlMenuTarget;
+	public Creditbuttonmenu  CreditButtonMenScript;
 	// Use this for initialization
 	void Start () {
 		
@@ -18,7 +19,8 @@ public class PlayButMenu : MonoBehaviour {
 	public void OnMouseDown ()
 	{
 		if (Input.GetKey ("mouse 0")) {
-			SceneManager.LoadScene ("level1");
+			LvlMenuTarget.gameObject.SetActive(true);
+			CreditButtonMenScript.SwitchColl();
 			
 		}
 	}

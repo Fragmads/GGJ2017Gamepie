@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MenuCreditClose : MonoBehaviour {
 	public GameObject CreditsTarget;
+	public Creditbuttonmenu  CreditButtonMenScript;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -17,6 +19,7 @@ public class MenuCreditClose : MonoBehaviour {
 	public void OnMouseDown ()
 	{
 		if (Input.GetKey ("mouse 0")) {
+			CreditButtonMenScript.SwitchColl();
 			CreditsTarget.gameObject.SetActive(false);
 
 		}
