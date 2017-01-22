@@ -35,6 +35,9 @@ public class GameManager : MonoBehaviour {
 
 	public GameLevel CurrentLevel;
 
+	[SerializeField]
+	public Color PlayerColor;
+
 	[Header("Game Rules")]
 	[Tooltip ("Point at which you conquer a neutral control spot")]
 	public float NeutralSpotConquerPoint = 100f;

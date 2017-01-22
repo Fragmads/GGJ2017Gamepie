@@ -102,16 +102,37 @@ public class GamePlayer : MonoBehaviour {
 
 				if(spot != this.chargingSpot && spot != null && spot.CurrentOwner != null && spot.CurrentOwner == this && spot.IsTaken){
 					this.chargingSpot = spot;
+					this.isClicking = true;
+
+					// Clear clicks from other spots
+					foreach(ControlSpot s in this.ControlledSpots){
+						if(s != spot){
+							s.NotClickedAnymore();
+						}
+					}
+
+					FeedbackManager.Instance.DisplayJaugeAtSpot(spot);
 				}
 				else{
 					this.chargingSpot = null;
 					this.isClicking = false;
+					FeedbackManager.Instance.HideJauge();
+
 				}
 
 			}
 			else {
 				this.chargingSpot = spot;
 				this.isClicking = true;
+
+				// Clear clicks from other spots
+				foreach(ControlSpot s in this.ControlledSpots){
+					if(s != spot){
+						s.NotClickedAnymore();
+					}
+				}
+
+				FeedbackManager.Instance.DisplayJaugeAtSpot(spot);
 			}
 		}
 

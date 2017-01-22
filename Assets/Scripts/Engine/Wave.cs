@@ -31,8 +31,6 @@ public class Wave : MonoBehaviour {
 	private List<object> collidedList = new List<object>();
 	private List<Wave> siblings = new List<Wave>();
 
-	private WaveGenerator Generator;
-
 	private bool destroyed = false;
 
 	[SerializeField]
