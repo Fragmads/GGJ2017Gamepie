@@ -55,10 +55,11 @@ MonoBehaviour:
   PlayerColor: {r: 0, g: 0, b: 1, a: 1}
   NeutralSpotConquerPoint: 100
   NeutralMainColor: {r: 0.9411765, g: 0.9411765, b: 0.9411765, a: 1}
-  Level1ChargeTime: 0.75
-  Level2ChargeTime: 1.5
-  Level3ChargeTime: 2.25
-  Level1Value: 30
-  Level2Value: 50
-  Level3Value: 70
+  Level1ChargeTime: 0.3
+  Level2ChargeTime: 1
+  Level3ChargeTime: 2
+  Level1Value: 50
+  Level2Value: 120
+  Level3Value: 200
+  ShowLevelSelection: 0
   forcedSpot: {fileID: 0}

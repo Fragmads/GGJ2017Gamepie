@@ -132,8 +132,9 @@ public class Wave : MonoBehaviour {
 
 			this.distanceTraveled += ms;
 
-			this.colliderObject.transform.localScale = new Vector3(this.distanceTraveled * 1f, 1f, 1f);
+			this.colliderObject.transform.localScale = new Vector3(this.distanceTraveled * 1f, this.distanceTraveled, 1f);
 
+			this.WaveRenderer.transform.position = this.startSpot.transform.position;
 
 
 			// Decay
@@ -155,8 +156,13 @@ public class Wave : MonoBehaviour {
 
 	public void OnTriggerEnter2D(Collider2D col){
 			
+		if(col.tag == "obstacle"){
 
-		if(col.tag == "wave" && col.GetComponentInParent<Wave>() != null){
+			this.Value = 0f;
+			this.OnDestroyWave();
+
+		}
+		else if(col.tag == "wave" && col.GetComponentInParent<Wave>() != null){
 
 			Wave w = col.GetComponentInParent<Wave>();
 
@@ -211,6 +217,10 @@ public class Wave : MonoBehaviour {
 
 		// If those are ennemies wave
 		if(this.owner != other.owner){
+
+			if(this.owner == GamePlayer.UserPlayer){
+				SoundManager.Instance.PlayWaveCollision();
+			}
 
 			this.Value -= otherValue;
 

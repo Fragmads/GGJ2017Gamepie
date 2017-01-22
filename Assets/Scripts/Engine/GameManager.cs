@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -54,6 +55,9 @@ public class GameManager : MonoBehaviour {
 	public float Level2Value = 50f;
 	public float Level3Value = 70f;
 
+	[HideInInspector]
+	public bool ShowLevelSelection = false;
+
 	#endregion
 
 	[Header ("Debug")]
@@ -71,8 +75,32 @@ public class GameManager : MonoBehaviour {
 
 		}
 
+		if(Input.GetKeyDown(KeyCode.W)){
+			this.Win();
+
+		}
+
+		if (Input.GetKeyDown(KeyCode.L)){
+			this.GameOver();
+		}
+
 
 		#endif
+	}
+
+	public void Start(){
+
+		SceneManager.sceneLoaded += this.OnSceneLoaded;
+
+	}
+
+	private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+
+		// Get next scene
+		this.CurrentLevel = GameObject.FindObjectOfType<GameLevel>();
+
+		FeedbackManager.Instance.HideJauge();
+
 	}
 
 
@@ -80,10 +108,37 @@ public class GameManager : MonoBehaviour {
 
 		Debug.Log("GameManager.GameOver");
 
+		SoundManager.Instance.PlayLooseGame();
+
+		this.Invoke("resetLevel", 1.5f);
+
 	}
 
 	public void Win(){
 		Debug.Log("GameManager.Win");
+
+		SoundManager.Instance.PlayWinGame();
+
+		this.Invoke("startNextLevel", 1.5f);
+
+	}
+
+	private void startNextLevel(){
+
+		if(this.CurrentLevel != null && this.CurrentLevel.NextLevel != null){
+			SceneManager.LoadScene(this.CurrentLevel.NextLevel);
+
+			if(this.CurrentLevel.NextLevel == "Menu"){
+				this.ShowLevelSelection = true;
+			}
+
+		}
+
+	}
+
+	private void resetLevel(){
+
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
 	}
 

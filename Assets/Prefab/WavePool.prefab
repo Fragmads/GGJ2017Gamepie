@@ -52,6 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NumberOfWaveByImpulse: 8
-  baseWaves: 10
+  baseWaves: 3
   WavePrefab: {fileID: 114981321980349464, guid: 660433729ed64c4459fe96fd2020e07f,
     type: 2}
+  Holder: {fileID: 0}
